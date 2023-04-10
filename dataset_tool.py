@@ -106,6 +106,25 @@ def open_image_zip(source, *, max_images: Optional[int]):
 
 #----------------------------------------------------------------------------
 
+def open_DECIMER(source, *, max_images: Optional[int]):
+    with zipfile.ZipFile(source, mode='r') as z:
+        input_images = [str(f) for f in sorted(z.namelist()) if is_image_ext(f)]
+
+    max_idx = maybe_min(len(input_images), max_images)
+
+    def iterate_images():
+        with zipfile.ZipFile(source, mode='r') as z:
+            for idx, fname in enumerate(input_images):
+                with z.open(fname, 'r') as file:
+                    img = PIL.Image.open(file).convert("L")
+                    img = np.array(img)
+                yield dict(img=img, label=None)
+                if idx >= max_idx-1:
+                    break
+    return max_idx, iterate_images()
+
+#----------------------------------------------------------------------------
+
 def open_lmdb(lmdb_dir: str, *, max_images: Optional[int]):
     import cv2  # pip install opencv-python
     import lmdb  # pip install lmdb # pylint: disable=import-error
@@ -260,6 +279,8 @@ def open_dataset(source, *, max_images: Optional[int]):
             return open_cifar10(source, max_images=max_images)
         elif os.path.basename(source) == 'train-images-idx3-ubyte.gz':
             return open_mnist(source, max_images=max_images)
+        elif os.path.basename(source) == 'DECIMER_HDM_Dataset_Images.zip':
+            return open_DECIMER(source, max_images=max_images)
         elif file_ext(source) == 'zip':
             return open_image_zip(source, max_images=max_images)
         else:
