@@ -1,0 +1,21 @@
+name: stylegan2
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - cudatoolkit=11.1
+  - pytorch=1.8.0=*cuda*
+  - numpy
+  - pillow
+  - tqdm
+  - click
+  - requests
+  - scipy
+  - jupyter
+  - matplotlib
+  - pip
+  - pip:
+    - imageio-ffmpeg==0.4.3
+    - pyspng==0.1.0
+    - setuptools==59.5.0
+    - tensorboard
