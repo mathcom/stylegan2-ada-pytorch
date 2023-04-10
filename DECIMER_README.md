@@ -22,5 +22,5 @@ Training a new network for DECIMER
 ----
 ```
 mkdir training-runs
-python train.py --outdir=./training-runs --data=./datasets/DECIMER.zip --gpus=1 --cfg=auto --kimg=1000 --batch=32
+python train.py --outdir=./training-runs --data=./datasets/DECIMER.zip --gpus=1 --cfg=auto --kimg=2000 --batch=32
 ```
